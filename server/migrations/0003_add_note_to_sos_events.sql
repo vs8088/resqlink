@@ -1,0 +1,2 @@
+ALTER TABLE sos_events
+  ADD COLUMN IF NOT EXISTS note TEXT;

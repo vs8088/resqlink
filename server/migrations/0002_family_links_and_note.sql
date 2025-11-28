@@ -1,6 +1,3 @@
-ALTER TABLE sos_events
-  ADD COLUMN IF NOT EXISTS note TEXT;
-
 CREATE TABLE IF NOT EXISTS family_links (
   owner_uid TEXT NOT NULL,
   contact_uid TEXT NOT NULL,
