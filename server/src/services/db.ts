@@ -1,10 +1,12 @@
 import crypto from 'crypto';
 import { query } from '../db/pool';
 import { SOSPayload } from '../types';
+import { canonicalPayload } from '../utils/payloadSerialization';
 
 export type RelayMeta = { hops: string[]; ttlRemaining: number; hash: string };
 
-export type SOSRecord = SOSPayload & {
+export type SOSRecord = Omit<SOSPayload, 'sig'> & {
+  sig?: string;
   id: number;
   receivedAt: number;
   relay?: RelayMeta;
@@ -27,22 +29,7 @@ type SosRow = {
 };
 
 const hashPayload = (payload: SOSPayload): string => {
-  const normalized = JSON.stringify({
-    ver: payload.ver,
-    uid: payload.uid,
-    ts: payload.ts,
-    loc: {
-      lat: payload.loc.lat,
-      lng: payload.loc.lng,
-      acc: payload.loc.acc ?? null
-    },
-    med: {
-      bloodType: payload.med.bloodType,
-      conditions: payload.med.conditions
-    },
-    status: payload.status,
-    note: payload.note ?? null
-  });
+  const normalized = JSON.stringify(canonicalPayload(payload));
   return crypto.createHash('sha256').update(normalized).digest('hex');
 };
 
@@ -59,6 +46,7 @@ const mapRow = (row: SosRow): SOSRecord => ({
   med: row.med,
   status: row.status as SOSPayload['status'],
   note: row.note ?? undefined,
+  sig: undefined,
   receivedAt: new Date(row.inserted_at).getTime(),
   relay: row.relay_meta || undefined
 });
