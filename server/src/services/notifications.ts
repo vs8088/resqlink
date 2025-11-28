@@ -43,12 +43,13 @@ const sendFcm = async ({ tokens, title, body, data }: PushPayload) => {
     if (!res.ok) {
       const text = await res.text();
       log('notify_error', { status: res.status, body: text });
-      return;
+      throw new Error(`FCM request failed: ${res.status}`);
     }
 
     const json = await res.json();
     log('notify_sent', { success: json.success, failure: json.failure });
   } catch (error) {
     log('notify_error', error);
+    throw error;
   }
 };
