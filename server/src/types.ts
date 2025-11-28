@@ -17,4 +17,5 @@ export type SOSPayload = {
   };
   status: DisasterStatus;
   note?: string;
+  sig: string;
 };

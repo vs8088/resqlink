@@ -4,6 +4,7 @@ import { DatabaseService } from '../services/db';
 import { MeshService } from '../services/mesh';
 import { NotificationService } from '../services/notifications';
 import { validatePayload } from '../utils/payloadValidation';
+import { serializePayloadForSignature } from '../utils/payloadSerialization';
 
 export const sosRouter = Router();
 
@@ -23,6 +24,10 @@ sosRouter.post('/sos', async (req, res) => {
 
     const decrypted = CryptoService.decryptPayload(encryptedPayload);
     const validated = validatePayload(decrypted);
+    const canonical = serializePayloadForSignature(validated);
+    if (!CryptoService.verifySignature(canonical, validated.sig)) {
+      throw new Error('Invalid signature');
+    }
     const result = await DatabaseService.saveSOS(validated, { hops, ttlRemaining: ttl, hash });
 
     if (result.duplicate) return res.json({ ok: true, duplicate: true, reason: 'same_payload' });

@@ -4,6 +4,7 @@ import { CryptoService } from '../services/crypto';
 import { NotificationService } from '../services/notifications';
 import { MeshService } from '../services/mesh';
 import { validatePayload } from '../utils/payloadValidation';
+import { serializePayloadForSignature } from '../utils/payloadSerialization';
 
 export const statusRouter = Router();
 
@@ -44,6 +45,10 @@ statusRouter.post('/status', async (req, res) => {
     }
     const decrypted = CryptoService.decryptPayload(encryptedPayload);
     const validated = validatePayload(decrypted);
+    const canonical = serializePayloadForSignature(validated);
+    if (!CryptoService.verifySignature(canonical, validated.sig)) {
+      throw new Error('Invalid signature');
+    }
     const result = await DatabaseService.saveSOS(validated, { hops, ttlRemaining: ttl, hash });
     if (result.duplicate) return res.json({ ok: true, duplicate: true, reason: 'same_payload' });
     if (result.stale) return res.json({ ok: true, stale: true, reason: 'older_timestamp' });
