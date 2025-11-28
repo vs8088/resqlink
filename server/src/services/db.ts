@@ -171,7 +171,7 @@ export class DatabaseService {
       `INSERT INTO family_links (owner_uid, contact_uid, alias, role, invite_token)
        VALUES ($1, $2, $3, $4, $5)
        ON CONFLICT (owner_uid, contact_uid) DO UPDATE
-       SET alias = EXCLUDED.alias, role = EXCLUDED.role, invite_token = EXCLUDED.invite_token, verified_at = family_links.verified_at`,
+       SET alias = EXCLUDED.alias, role = EXCLUDED.role, invite_token = EXCLUDED.invite_token, verified_at = family_links.verified_at, updated_at = NOW()`,
       [ownerUid, contactUid, alias ?? null, role ?? 'family', token]
     );
     return token;
@@ -180,7 +180,7 @@ export class DatabaseService {
   static async acceptFamily(token: string, contactUid: string) {
     const rows = await query<{ owner_uid: string; contact_uid: string }>(
       `UPDATE family_links
-       SET verified_at = NOW(), contact_uid = $2
+       SET verified_at = NOW(), contact_uid = $2, updated_at = NOW()
        WHERE invite_token = $1
        RETURNING owner_uid, contact_uid`,
       [token, contactUid]
