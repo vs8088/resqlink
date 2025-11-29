@@ -398,11 +398,15 @@ DATABASE_URL=postgres://user:password@localhost:5432/resq_link
 PGSSL=false
 
 # Crypto
-RSA_PRIVATE_KEY_PATH=./keys/private.pem
-RSA_PUBLIC_KEY_PATH=./keys/public.pem
+SERVER_PRIVATE_KEY_PATH=./keys/private.pem
+SERVER_PUBLIC_KEY_PATH=./keys/public.pem
 
 # Push Notifications
 FCM_SERVER_KEY=YOUR_FCM_SERVER_KEY
+
+# API Auth
+API_SHARED_SECRET=change-me-dev-token
+API_AUTH_REQUIRED=false
 
 # Server
 PORT=4000

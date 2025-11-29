@@ -5,9 +5,11 @@ coverage/
 .expo/
 .env
 .env.*
+!.env.example
 npm-debug.log*
 yarn-error.log*
 package-lock.json
 *.DS_Store
 .vscode/
 .idea/
+server/keys/
