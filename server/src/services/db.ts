@@ -152,6 +152,11 @@ export class DatabaseService {
     return rows.map(r => r.token);
   }
 
+  static async removeContactTokens(tokens: string[]) {
+    if (!tokens.length) return;
+    await query(`DELETE FROM contact_tokens WHERE token = ANY($1)`, [tokens]);
+  }
+
   // Family links
   static async inviteFamily(ownerUid: string, contactUid: string, alias?: string, role?: string) {
     const token = crypto.randomBytes(12).toString('hex');
