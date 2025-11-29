@@ -24,9 +24,11 @@ sosRouter.post('/sos', async (req, res) => {
 
     const decrypted = CryptoService.decryptPayload(encryptedPayload);
     const validated = validatePayload(decrypted);
-    const canonical = serializePayloadForSignature(validated);
-    if (!CryptoService.verifySignature(canonical, validated.sig)) {
-      throw new Error('Invalid signature');
+    if (validated.sig) {
+      const canonical = serializePayloadForSignature(validated);
+      if (!CryptoService.verifySignature(canonical, validated.sig)) {
+        throw new Error('Invalid signature');
+      }
     }
     const result = await DatabaseService.saveSOS(validated, { hops, ttlRemaining: ttl, hash });
 
