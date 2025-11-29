@@ -12,6 +12,10 @@ type BuildPayloadParams = {
 
 export class CryptoService {
   static async buildEncryptedPayload(params: BuildPayloadParams): Promise<EncryptedPayload> {
+    if (!SERVER_PUBLIC_KEY || SERVER_PUBLIC_KEY.includes('REPLACE_ME')) {
+      throw new Error('Server public key is not configured');
+    }
+
     const payload = {
       ver: '1.0',
       uid: params.userProfile.id,
@@ -44,7 +48,8 @@ export class CryptoService {
     const aesKeyBase64 = CryptoJS.enc.Base64.stringify(aesKey);
 
     // Wrap AES key with RSA
-    const encryptedAESKey = await RSA.encrypt(aesKeyBase64, SERVER_PUBLIC_KEY);
+    const normalizedPublicKey = SERVER_PUBLIC_KEY.replace(/\\n/g, '\n');
+    const encryptedAESKey = await RSA.encrypt(aesKeyBase64, normalizedPublicKey);
 
     const finalPackage = {
       k: encryptedAESKey,
