@@ -1,5 +1,4 @@
-// BLE MTU varies across platforms; 120 bytes keeps payload + headers under common limits.
-const CHUNK_SIZE = 120;
+const CHUNK_SIZE = 150;
 
 export type Packet = {
   i: number;
@@ -7,7 +6,7 @@ export type Packet = {
   d: string;
 };
 
-export const PacketManager = {
+export const PacketManagerExperimental = {
   chunkData(dataString: string): string[] {
     const totalChunks = Math.ceil(dataString.length / CHUNK_SIZE);
     const packets: string[] = [];
