@@ -37,7 +37,11 @@ export const validatePayload = (input: unknown): SOSPayload => {
     throw new Error('Invalid status');
   }
 
-  if (!isString(payload.sig)) throw new Error('Missing signature');
+  let signature: string | undefined;
+  if (payload.sig !== undefined) {
+    if (!isString(payload.sig)) throw new Error('Invalid signature');
+    signature = payload.sig;
+  }
 
   let note: string | undefined;
   if (payload.note !== undefined) {
@@ -54,6 +58,6 @@ export const validatePayload = (input: unknown): SOSPayload => {
     med: { bloodType, conditions: conditions as string[] },
     status: payload.status,
     note,
-    sig: payload.sig
+    sig: signature
   };
 };
