@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>en</string>
+  <key>CFBundleDisplayName</key>
+  <string>ResQLink</string>
+  <key>CFBundleIdentifier</key>
+  <string>com.resqlink</string>
+  <key>CFBundleName</key>
+  <string>ResQLink</string>
+  <key>CFBundleShortVersionString</key>
+  <string>1.0</string>
+  <key>CFBundleVersion</key>
+  <string>1</string>
+  <key>LSRequiresIPhoneOS</key>
+  <true/>
+  <key>UIRequiredDeviceCapabilities</key>
+  <array>
+    <string>arm64</string>
+    <string>bluetooth-le</string>
+    <string>location-services</string>
+  </array>
+  <key>UIBackgroundModes</key>
+  <array>
+    <string>bluetooth-central</string>
+    <string>bluetooth-peripheral</string>
+    <string>location</string>
+    <string>processing</string>
+    <string>remote-notification</string>
+  </array>
+  <key>NSUserTrackingUsageDescription</key>
+  <string>ResQLink does not track you across apps. We only request permissions needed for emergency relays.</string>
+  <key>NSBluetoothAlwaysUsageDescription</key>
+  <string>Bluetooth is used to relay encrypted SOS beacons to nearby devices when the network is down.</string>
+  <key>NSBluetoothPeripheralUsageDescription</key>
+  <string>Bluetooth advertising keeps your SOS active so other rescuer devices can pick it up.</string>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>Your location is added to SOS and safety updates so responders know where to help.</string>
+  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+  <string>Background location lets ResQLink keep your SOS relay alive even if the app is not open.</string>
+  <key>NSLocationAlwaysUsageDescription</key>
+  <string>We need location access to relay your SOS and safety status in the background.</string>
+  <key>NSLocationTemporaryUsageDescriptionDictionary</key>
+  <dict>
+    <key>PurposeResQLinkSOS</key>
+    <string>We temporarily request precise location to attach the most accurate coordinates to your SOS.</string>
+  </dict>
+  <key>NSLocalNetworkUsageDescription</key>
+  <string>Local connectivity is used to keep Bluetooth relays reliable during outages.</string>
+  <key>NSUserNotificationUsageDescription</key>
+  <string>Notifications alert you about relay status, nearby rescue nodes, and safety updates.</string>
+  <key>FirebaseAppDelegateProxyEnabled</key>
+  <true/>
+</dict>
+</plist>

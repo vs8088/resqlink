@@ -1,0 +1,2 @@
+rootProject.name = "ResQLink"
+apply from: file("../node_modules/react-native-gradle-plugin/settings.gradle")

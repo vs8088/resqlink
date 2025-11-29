@@ -1,0 +1,45 @@
+apply plugin: "com.android.application"
+apply plugin: "com.facebook.react"
+apply plugin: "com.google.gms.google-services"
+
+react {
+    autolinkLibrariesWithApp() // RN Gradle plugin handles native modules
+}
+
+android {
+    namespace "com.resqlink"
+    compileSdkVersion 34
+
+    defaultConfig {
+        applicationId "com.resqlink"
+        minSdkVersion 24
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
+    packagingOptions {
+        resources {
+            excludes += [
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt"
+            ]
+        }
+    }
+}
+
+dependencies {
+    implementation("com.facebook.react:react-android")
+    implementation("androidx.core:core:1.13.1")
+    implementation platform("com.google.firebase:firebase-bom:33.3.0")
+    implementation("com.google.firebase:firebase-messaging")
+}
