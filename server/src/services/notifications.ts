@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { FCM_SERVER_KEY } from '../config';
+import { DatabaseService } from './db';
 import { log } from '../utils/log';
 
 type PushPayload = {
@@ -47,6 +48,20 @@ const sendFcm = async ({ tokens, title, body, data }: PushPayload) => {
     }
 
     const json = await res.json();
+    const invalidTokens: string[] = [];
+    if (Array.isArray(json.results)) {
+      json.results.forEach((result: { error?: string }, idx: number) => {
+        if (['NotRegistered', 'InvalidRegistration', 'MismatchSenderId'].includes(result.error ?? '')) {
+          invalidTokens.push(tokens[idx]);
+        }
+      });
+    }
+
+    if (invalidTokens.length) {
+      await DatabaseService.removeContactTokens(invalidTokens);
+      log('notify_prune_tokens', { removed: invalidTokens.length });
+    }
+
     log('notify_sent', { success: json.success, failure: json.failure });
   } catch (error) {
     log('notify_error', error);
